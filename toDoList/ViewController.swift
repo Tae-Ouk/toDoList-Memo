@@ -90,6 +90,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            data.remove(at: indexPath.row)
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    
+    
     @objc func switchStateChanged(_ sender: UISwitch) {
         guard let cell = sender.superview as? UITableViewCell,
               let indexPath = toDoListTable.indexPath(for: cell),
