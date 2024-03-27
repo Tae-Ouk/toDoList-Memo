@@ -27,7 +27,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="추가하기"/>
                                 <connections>
-                                    <action selector="addListButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DVJ-9e-n1Y"/>
+                                    <action selector="addListButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HaZ-6M-nXg"/>
                                 </connections>
                             </button>
                         </subviews>
