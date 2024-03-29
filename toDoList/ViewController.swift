@@ -10,9 +10,8 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var toDoListTable: UITableView!
     
-    var data: [(id: Int, title: String, isCompleted: Bool)] = []
+    var data: [(id: Int, title: String, isCompleted: Bool, addTime: String)] = []
     var count: Int = 0
-    
     
     
     override func viewDidLoad() {
@@ -22,7 +21,6 @@ class ViewController: UIViewController {
         toDoListTable.delegate = self
         toDoListTable.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
-    
     
     
     @IBAction func addListButton(_ sender: Any) {
@@ -51,19 +49,25 @@ class ViewController: UIViewController {
     }
     
     
-    
     func addTask(title: String) {
+        let addListTime = DateFormatter()
+        addListTime.dateFormat = "HH:mm"
+        let addListTimeTrnasString = addListTime.string(from: Date())
+        
         count += 1
-        data.append((id: count, title: title, isCompleted: false))
+        
+        data.append((id: count, title: title, isCompleted: false, addTime: addListTimeTrnasString))
+        
         toDoListTable.reloadData()
     }
 }
+
+
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    
     
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,12 +86,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected: \(data[indexPath.row])")
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -97,7 +99,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
-    
     
     
     @objc func switchStateChanged(_ sender: UISwitch) {
@@ -111,9 +112,29 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         data[indexPath.row].isCompleted = sender.isOn
         
         let attributedString = NSMutableAttributedString(string: taskTitle)
+
         if sender.isOn {
             attributedString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 1, range: NSMakeRange(0, attributedString.length))
+            
+            showcompletedAlert()
         }
+        
         cell.textLabel?.attributedText = attributedString
+    }
+    
+    
+    func showcompletedAlert() {
+        let completedTitle = "🎉🎉🎉"
+        let completedMessage = "할 일을 끝냈습니다! 😝"
+        let doneTitle = "확인"
+            
+        let completedAlert = UIAlertController(title: completedTitle, message: completedMessage, preferredStyle: .alert)
+
+        let doneButton = UIAlertAction(title: doneTitle, style: .default) { _ in
+        }
+        
+        completedAlert.addAction(doneButton)
+        
+        self.present(completedAlert, animated: true)
     }
 }
